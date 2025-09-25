@@ -161,6 +161,6 @@ Content-Type: application/json
 {
   "name": "ann",
   "email": "johnann@example.com",
-  "rating": 5,
-  "review": "GOOD, highly recommend!"
+  "rating": 2,
+  "review": "OK, highly recommend!"
 }
