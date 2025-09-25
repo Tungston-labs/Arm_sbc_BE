@@ -1,0 +1,166 @@
+@baseUrl = http://127.0.0.1:8000
+
+
+# ---------------authentication---------------------------------------------------
+
+### Admin Login
+POST {{baseUrl}}/api/accounts/login/
+Content-Type: application/json
+
+{
+  "email": "armsbctls@gmail.com",
+  "password": "password123"
+}
+
+###forgot password/Send OTP to email
+
+POST {{baseUrl}}/api/accounts/forgot-password/
+Content-Type: application/json
+
+{
+  "email": "armsbctls@gmail.com"
+}
+### Verify OTP sent to email
+POST {{baseUrl}}/api/accounts/verify-otp/
+Content-Type: application/json
+
+{
+  "email": "armsbctls@gmail.com",
+  "otp": "86187"
+}
+### Reset password after OTP verification
+POST {{baseUrl}}/api/accounts/reset-password/
+Content-Type: application/json
+
+{
+  "email": "armsbctls@gmail.com",
+  "new_password": "password123"
+}
+
+# ----------------product ----------------------------------
+
+###add product by admin
+POST {{baseUrl}}/api/products/create/
+
+
+###list product by admin
+GET {{baseUrl}}/api/products/create/
+
+###update product
+PUT {{baseUrl}}/api/products/<uuid>/
+
+###single product view
+GET {{baseUrl}}/api/products/<uuid>/
+
+
+#-------------------------------- product list by customer
+
+
+### List all products (public)
+GET {{baseUrl}}/api/products/public/
+Accept: application/json
+
+
+
+### Get product detail by UUID (public)
+# Replace <PRODUCT_ID> with actual UUID of the product
+GET {{baseUrl}}/api/products/public/32628e53-acb0-45d4-9c29-cbbbe59a596a/
+Accept: application/json
+
+# -------------------------------cart section------------------------
+
+### Add product
+POST {{baseUrl}}/api/cart/add/25a6e9bd-7cd5-465c-91b5-c86f8915f236/
+Content-Type: application/json
+X-Cart-Token: eed00d21-c25a-4b5e-943f-91f407a46819
+
+
+###
+
+### Get cart items
+GET {{baseUrl}}/api/cart/
+Content-Type: application/json
+X-Cart-Token: eed00d21-c25a-4b5e-943f-91f407a46819
+
+###
+
+### Update quantity of a cart item(id from cart item model)
+PATCH {{baseUrl}}/api/cart/item/1e93077d-9596-4d88-a8b6-335074ba0313/update/
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+###
+
+### Remove item from cart
+DELETE {{baseUrl}}/api/cart/item/6699d774-b8fa-4a96-8e84-938b35cbae06/delete/
+Content-Type: application/json
+
+
+### ----------------------------inquiry section---------------------------------------------------------------
+
+### 1. Create Inquiry (unauthenticated user, pass cart items)
+POST {{baseUrl}}/api/inquiries/create/
+Content-Type: application/json
+
+{
+  "cart_id": "3f0ff7e9-defe-4a0c-aa3e-a0050dbe3b86",
+  "product_ids": [
+    "25a6e9bd-7cd5-465c-91b5-c86f8915f236",
+    "32628e53-acb0-45d4-9c29-cbbbe59a596a"
+  ],
+  "first_name": "John",
+  "last_name": "Doe",
+  "company_name": "ACME Corp",
+  "email": "john.doe@example.com",
+  "phone": "+1234567890",
+  "address": "123 Main Street",
+  "country": "USA",
+  "state": "CA",
+  "delivery_location": "Warehouse 1",
+  "description": "Need more info about these products"
+}
+
+
+### 2. List all inquiries (admin)
+GET {{baseUrl}}/api/inquiries/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4Nzk3NDkyLCJpYXQiOjE3NTg3NzU4OTIsImp0aSI6IjRjNTNkODg0YTE2NzRkZjdhZjM0MDY1MDRjYjMzZjdiIiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9._LMacquAxLwV0UPbFempCtGFqTEjtwZaS4pS74j10AE
+
+### 3. Get inquiry details (admin)
+GET {{baseUrl}}/api/inquiries/ae315fac-f0a0-487a-a6fa-dc49000966df/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4NzM0NjI1LCJpYXQiOjE3NTg3MTMwMjUsImp0aSI6IjY2YWViOTk4YjAxYjQ4NWQ5Y2VlNmQ5NDExZmU1YWM3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.069kTAzgEVDOqc47nbObmN_4vrwhxTNqh2_wjPikGdk
+
+### 4. Update inquiry status (admin)
+PATCH {{baseUrl}}/api/inquiries/ae315fac-f0a0-487a-a6fa-dc49000966df/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4NzM0NjI1LCJpYXQiOjE3NTg3MTMwMjUsImp0aSI6IjY2YWViOTk4YjAxYjQ4NWQ5Y2VlNmQ5NDExZmU1YWM3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.069kTAzgEVDOqc47nbObmN_4vrwhxTNqh2_wjPikGdk
+Content-Type: application/json
+
+{
+  "status": "open"
+}
+
+
+###------------------------------- dashboard count api-------------------------------------
+
+GET {{baseUrl}}/api/inquiries/dashboard/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4NzM2NDYyLCJpYXQiOjE3NTg3MTQ4NjIsImp0aSI6ImVhZTQzNmY0MGJkNjRmYzViYjI5MDYxOGY4Njg0OGU1IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.o0pSNMFQ8yV8-BfAvMGxtcsJuVXU-8TKyB-DDmie2CM
+
+
+###-----------------------review -------------------------
+
+### List all reviews for a product
+GET {{baseUrl}}/api/reviews/25a6e9bd-7cd5-465c-91b5-c86f8915f236/reviews/
+Accept: application/json
+
+### Add a review to a product
+POST {{baseUrl}}/api/reviews/25a6e9bd-7cd5-465c-91b5-c86f8915f236/reviews/add/
+Content-Type: application/json
+
+{
+  "name": "ann",
+  "email": "johnann@example.com",
+  "rating": 5,
+  "review": "GOOD, highly recommend!"
+}
