@@ -1,5 +1,5 @@
-@baseUrl = http://127.0.0.1:8000
-
+ @baseUrl = http://127.0.0.1:8000
+# @baseUrl = http://178.248.112.16:8002
 
 # ---------------authentication---------------------------------------------------
 
@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
   "email": "armsbctls@gmail.com",
-  "password": "password123"
+  "password": "password"
 }
 
 ###forgot password/Send OTP to email
@@ -26,7 +26,7 @@ Content-Type: application/json
 
 {
   "email": "armsbctls@gmail.com",
-  "otp": "86187"
+  "otp": "64591"
 }
 ### Reset password after OTP verification
 POST {{baseUrl}}/api/accounts/reset-password/
@@ -35,6 +35,24 @@ Content-Type: application/json
 {
   "email": "armsbctls@gmail.com",
   "new_password": "password123"
+}
+### Change Password
+POST http://127.0.0.1:8000/api/accounts/change-password/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODE5MDkwLCJpYXQiOjE3NTg3OTc0OTAsImp0aSI6ImUwOGY5YjgwNzgyNjRlYjQ4ZDVjNzlmMjViZjVlNmQyIiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.FXglPZDCkoaM5qlWk3ah2fYSuFOH6zOR4YdwzSHeiqE
+Content-Type: application/json
+
+{
+  "current_password": "password123",
+  "new_password": "password",
+  "confirm_new_password": "password"
+}
+### Logout
+POST http://127.0.0.1:8000/api/accounts/logout/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODE5MjU1LCJpYXQiOjE3NTg3OTc2NTUsImp0aSI6ImQwMzJjNzg5MGExYjRkMDBiNjlmOTkwODcwMGIyZjY1IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.CF1hbt325IdoWX3dwGjBNtof7GVee1mVwPOEQHT7mzw
+Content-Type: application/json
+
+{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1OTQwMjQ1NSwiaWF0IjoxNzU4Nzk3NjU1LCJqdGkiOiI2MDY0YmM2MDZhNjc0MDk1YjU0NzA2ODg4NWY1NTkwNCIsInVzZXJfaWQiOiJiNmYzN2NlYS03OWM1LTQ5YzEtYmYyYS03NjRhNTMyMWIwYjUifQ.UV3Flwsy7u6IcNqcTWHQzLrOBpWxpsx09kFG5AvpMt4"
 }
 
 # ----------------product ----------------------------------
@@ -45,6 +63,8 @@ POST {{baseUrl}}/api/products/create/
 
 ###list product by admin
 GET {{baseUrl}}/api/products/create/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODE2MDk3LCJpYXQiOjE3NTg3OTQ0OTcsImp0aSI6IjlkMjkyMDIyNjZlODRjN2RiZWFmNDgyMmE1ODRkOTJhIiwidXNlcl9pZCI6IjgxZGU2YjhjLTA3OTAtNGJlMS1hZTAyLWNkMjYyMThjYWMyYSJ9.-FqsBLGjjQhELAxlQMjZaeEZHl5hM9U-x_K-ECVQGJE
+
 
 ###update product
 PUT {{baseUrl}}/api/products/<uuid>/
@@ -70,7 +90,7 @@ Accept: application/json
 # -------------------------------cart section------------------------
 
 ### Add product
-POST {{baseUrl}}/api/cart/add/25a6e9bd-7cd5-465c-91b5-c86f8915f236/
+POST {{baseUrl}}/api/cart/add/5f08cb6b-dd91-45d2-844e-6fd79524def7/
 Content-Type: application/json
 X-Cart-Token: eed00d21-c25a-4b5e-943f-91f407a46819
 
@@ -134,7 +154,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 ### 4. Update inquiry status (admin)
 PATCH {{baseUrl}}/api/inquiries/ae315fac-f0a0-487a-a6fa-dc49000966df/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4NzM0NjI1LCJpYXQiOjE3NTg3MTMwMjUsImp0aSI6IjY2YWViOTk4YjAxYjQ4NWQ5Y2VlNmQ5NDExZmU1YWM3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.069kTAzgEVDOqc47nbObmN_4vrwhxTNqh2_wjPikGdk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODE2MDk3LCJpYXQiOjE3NTg3OTQ0OTcsImp0aSI6IjlkMjkyMDIyNjZlODRjN2RiZWFmNDgyMmE1ODRkOTJhIiwidXNlcl9pZCI6IjgxZGU2YjhjLTA3OTAtNGJlMS1hZTAyLWNkMjYyMThjYWMyYSJ9.-FqsBLGjjQhELAxlQMjZaeEZHl5hM9U-x_K-ECVQGJE
 Content-Type: application/json
 
 {
