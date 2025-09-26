@@ -11,6 +11,13 @@ Content-Type: application/json
   "email": "armsbctls@gmail.com",
   "password": "password"
 }
+### Get new Access Token using Refresh Token
+POST {{baseUrl}}/api/token/refresh/
+Content-Type: application/json
+
+{
+  "refresh": ""
+}
 
 ###forgot password/Send OTP to email
 
@@ -86,6 +93,11 @@ Accept: application/json
 # Replace <PRODUCT_ID> with actual UUID of the product
 GET {{baseUrl}}/api/products/public/32628e53-acb0-45d4-9c29-cbbbe59a596a/
 Accept: application/json
+
+
+###get related product using product id
+GET {{baseUrl}}/api/products/40541852-b045-4bd1-8abf-d3e007bc184c/related/
+
 
 # -------------------------------cart section------------------------
 

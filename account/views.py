@@ -1,7 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import AdminLoginSerializer
 from django.core.mail import send_mail
 from random import randint
@@ -10,6 +9,8 @@ from .serializers import ForgotPasswordSerializer, VerifyOTPSerializer, ResetPas
 from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 
 class AdminLoginView(APIView):
@@ -25,6 +26,23 @@ class AdminLoginView(APIView):
         }, status=status.HTTP_200_OK)
 
 
+
+
+class TokenRefreshCustomView(APIView):
+    def post(self, request):
+        refresh_token = request.data.get("refresh")
+
+        if not refresh_token:
+            return Response({"error": "Refresh token is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            refresh = RefreshToken(refresh_token)
+            new_access = refresh.access_token
+            return Response({
+                "access": str(new_access)
+            }, status=status.HTTP_200_OK)
+        except TokenError:
+            return Response({"error": "Invalid or expired refresh token."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ForgotPasswordView(APIView):
@@ -52,7 +70,6 @@ class ForgotPasswordView(APIView):
         )
         
         return Response({"message": "OTP sent to your email"}, status=status.HTTP_200_OK)
-
 
 class VerifyOTPView(APIView):
     def post(self, request):

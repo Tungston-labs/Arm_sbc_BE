@@ -23,7 +23,7 @@ class CartItem(TimeStampedModel):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField(default=1)
-    price_at_add = models.DecimalField(max_digits=12, decimal_places=2, default=0)  # snapshot
+    price_at_add = models.DecimalField(max_digits=12, decimal_places=2, default=0)  
 
     class Meta:
         unique_together = ('cart', 'product')

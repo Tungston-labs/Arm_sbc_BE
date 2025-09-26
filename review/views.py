@@ -16,7 +16,7 @@ class ProductReviewListView(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
 
-        # Calculate total reviews and average rating
+        
         stats = queryset.aggregate(
             total_reviews=Count('id'),
             avg_rating=Avg('rating')
@@ -25,7 +25,7 @@ class ProductReviewListView(generics.ListAPIView):
         data = {
             "total_reviews": stats["total_reviews"] or 0,
             "avg_rating": round(stats["avg_rating"], 2) if stats["avg_rating"] else 0,
-            "max_rating": 5,  # for clarity on frontend
+            "max_rating": 5,  
             "reviews": serializer.data
         }
         return Response(data)

@@ -4,10 +4,11 @@ from .models import Product
 from .serializers import ProductSerializer
 from rest_framework import generics, filters
 from rest_framework.pagination import PageNumberPagination
+from django.db.models import Q
 
 class ProductPagination(PageNumberPagination):
-    page_size = 10  # default items per page
-    page_size_query_param = 'page_size'  # allow client to override ?page_size=5
+    page_size = 10  
+    page_size_query_param = 'page_size'  
     max_page_size = 100
 
 class ProductListCreateView(generics.ListCreateAPIView):
@@ -40,5 +41,29 @@ class ProductPublicListView(generics.ListAPIView):
 class ProductPublicDetailView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny]  # no authentication required
-    lookup_field = 'id'  # assuming UUID field
+    permission_classes = [permissions.AllowAny]  
+    lookup_field = 'id'  
+
+# related product list
+
+class RelatedProductsView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        product_id = self.kwargs["id"]
+        try:
+            product = Product.objects.get(id=product_id, available=True)
+        except Product.DoesNotExist:
+            return Product.objects.none()
+
+       
+        qs = Product.objects.filter(
+            Q(ram=product.ram) | Q(cores=product.cores),
+            available=True
+        ).exclude(id=product.id)
+
+        if not qs.exists():
+            qs = Product.objects.exclude(id=product.id).filter(available=True)
+
+        return qs[:4]  
