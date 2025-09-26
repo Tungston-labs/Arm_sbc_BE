@@ -12,11 +12,11 @@ Content-Type: application/json
   "password": "password"
 }
 ### Get new Access Token using Refresh Token
-POST {{baseUrl}}/api/token/refresh/
+POST {{baseUrl}}/api/accounts/token/refresh/
 Content-Type: application/json
 
 {
-  "refresh": ""
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1OTQ2Nzk1NSwiaWF0IjoxNzU4ODYzMTU1LCJqdGkiOiJjMjgyYmZkNjljY2M0Nzk4YmE3NGY3Yzc3NzBmMTFhOSIsInVzZXJfaWQiOiJiNmYzN2NlYS03OWM1LTQ5YzEtYmYyYS03NjRhNTMyMWIwYjUifQ.WH1q1AIWbz6DLE_GUJB_0z6I5WnkWt1KuB6NH22EyjY"
 }
 
 ###forgot password/Send OTP to email
@@ -70,14 +70,15 @@ POST {{baseUrl}}/api/products/create/
 
 ###list product by admin
 GET {{baseUrl}}/api/products/create/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODE2MDk3LCJpYXQiOjE3NTg3OTQ0OTcsImp0aSI6IjlkMjkyMDIyNjZlODRjN2RiZWFmNDgyMmE1ODRkOTJhIiwidXNlcl9pZCI6IjgxZGU2YjhjLTA3OTAtNGJlMS1hZTAyLWNkMjYyMThjYWMyYSJ9.-FqsBLGjjQhELAxlQMjZaeEZHl5hM9U-x_K-ECVQGJE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODg1MDc4LCJpYXQiOjE3NTg4NjM0NzgsImp0aSI6IjhlNWJiMTZlYzg3YzQyZTU5MWVlMWRjNmI1Y2FiOGY3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.8v0wZZIiB7NbRMeylGnEG8VMbAX_w-O4O9GQRdB43dg
 
 
 ###update product
 PUT {{baseUrl}}/api/products/<uuid>/
 
 ###single product view
-GET {{baseUrl}}/api/products/<uuid>/
+GET {{baseUrl}}/api/products/32628e53-acb0-45d4-9c29-cbbbe59a596a/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODg1MDc4LCJpYXQiOjE3NTg4NjM0NzgsImp0aSI6IjhlNWJiMTZlYzg3YzQyZTU5MWVlMWRjNmI1Y2FiOGY3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.8v0wZZIiB7NbRMeylGnEG8VMbAX_w-O4O9GQRdB43dg
 
 
 #-------------------------------- product list by customer
@@ -102,7 +103,7 @@ GET {{baseUrl}}/api/products/40541852-b045-4bd1-8abf-d3e007bc184c/related/
 # -------------------------------cart section------------------------
 
 ### Add product
-POST {{baseUrl}}/api/cart/add/5f08cb6b-dd91-45d2-844e-6fd79524def7/
+POST {{baseUrl}}/api/cart/add/40541852-b045-4bd1-8abf-d3e007bc184c/
 Content-Type: application/json
 X-Cart-Token: eed00d21-c25a-4b5e-943f-91f407a46819
 
@@ -158,15 +159,15 @@ Content-Type: application/json
 
 ### 2. List all inquiries (admin)
 GET {{baseUrl}}/api/inquiries/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4Nzk3NDkyLCJpYXQiOjE3NTg3NzU4OTIsImp0aSI6IjRjNTNkODg0YTE2NzRkZjdhZjM0MDY1MDRjYjMzZjdiIiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9._LMacquAxLwV0UPbFempCtGFqTEjtwZaS4pS74j10AE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODg1MDc4LCJpYXQiOjE3NTg4NjM0NzgsImp0aSI6IjhlNWJiMTZlYzg3YzQyZTU5MWVlMWRjNmI1Y2FiOGY3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.8v0wZZIiB7NbRMeylGnEG8VMbAX_w-O4O9GQRdB43dg
 
 ### 3. Get inquiry details (admin)
 GET {{baseUrl}}/api/inquiries/ae315fac-f0a0-487a-a6fa-dc49000966df/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4NzM0NjI1LCJpYXQiOjE3NTg3MTMwMjUsImp0aSI6IjY2YWViOTk4YjAxYjQ4NWQ5Y2VlNmQ5NDExZmU1YWM3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.069kTAzgEVDOqc47nbObmN_4vrwhxTNqh2_wjPikGdk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODg1MDc4LCJpYXQiOjE3NTg4NjM0NzgsImp0aSI6IjhlNWJiMTZlYzg3YzQyZTU5MWVlMWRjNmI1Y2FiOGY3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.8v0wZZIiB7NbRMeylGnEG8VMbAX_w-O4O9GQRdB43dg
 
 ### 4. Update inquiry status (admin)
 PATCH {{baseUrl}}/api/inquiries/ae315fac-f0a0-487a-a6fa-dc49000966df/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODE2MDk3LCJpYXQiOjE3NTg3OTQ0OTcsImp0aSI6IjlkMjkyMDIyNjZlODRjN2RiZWFmNDgyMmE1ODRkOTJhIiwidXNlcl9pZCI6IjgxZGU2YjhjLTA3OTAtNGJlMS1hZTAyLWNkMjYyMThjYWMyYSJ9.-FqsBLGjjQhELAxlQMjZaeEZHl5hM9U-x_K-ECVQGJE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODg1MDc4LCJpYXQiOjE3NTg4NjM0NzgsImp0aSI6IjhlNWJiMTZlYzg3YzQyZTU5MWVlMWRjNmI1Y2FiOGY3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.8v0wZZIiB7NbRMeylGnEG8VMbAX_w-O4O9GQRdB43dg
 Content-Type: application/json
 
 {
@@ -177,7 +178,7 @@ Content-Type: application/json
 ###------------------------------- dashboard count api-------------------------------------
 
 GET {{baseUrl}}/api/inquiries/dashboard/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4NzM2NDYyLCJpYXQiOjE3NTg3MTQ4NjIsImp0aSI6ImVhZTQzNmY0MGJkNjRmYzViYjI5MDYxOGY4Njg0OGU1IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.o0pSNMFQ8yV8-BfAvMGxtcsJuVXU-8TKyB-DDmie2CM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODg1MDc4LCJpYXQiOjE3NTg4NjM0NzgsImp0aSI6IjhlNWJiMTZlYzg3YzQyZTU5MWVlMWRjNmI1Y2FiOGY3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.8v0wZZIiB7NbRMeylGnEG8VMbAX_w-O4O9GQRdB43dg
 
 
 ###-----------------------review -------------------------
