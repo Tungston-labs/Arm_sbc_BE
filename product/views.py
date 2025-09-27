@@ -5,18 +5,14 @@ from .serializers import ProductSerializer
 from rest_framework import generics, filters
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
-
-class ProductPagination(PageNumberPagination):
-    page_size = 10  
-    page_size_query_param = 'page_size'  
-    max_page_size = 100
+from shared.pagination import CustomPagination
 
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [permissions.IsAuthenticated]  
-    pagination_class = ProductPagination
+    pagination_class = CustomPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'description', 'processor__cpu', 'memory__technology']  
 
@@ -33,7 +29,7 @@ class ProductPublicListView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny] 
-    pagination_class = ProductPagination
+    pagination_class = CustomPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'description', 'processor__cpu', 'memory__technology']  
 

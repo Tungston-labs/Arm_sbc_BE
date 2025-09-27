@@ -1,5 +1,5 @@
-#  @baseUrl = http://127.0.0.1:8000
-@baseUrl = http://178.248.112.16:8002
+@baseUrl = http://127.0.0.1:8000
+# baseUrl = http://178.248.112.16:8002
 
 # ---------------authentication---------------------------------------------------
 
@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
   "email": "armsbctls@gmail.com",
-  "password": "password"
+  "password": "password123"
 }
 ### Get new Access Token using Refresh Token
 POST {{baseUrl}}/api/accounts/token/refresh/

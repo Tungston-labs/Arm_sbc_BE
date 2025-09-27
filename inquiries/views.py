@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from product.models import Product
 from rest_framework import generics, permissions
+from shared.pagination import CustomPagination
 
 
 class ProductInquiryCreateView(generics.CreateAPIView):
@@ -15,6 +16,8 @@ class ProductInquiryCreateView(generics.CreateAPIView):
 class ProductInquiryListView(generics.ListAPIView):
     queryset = ProductInquiry.objects.all()
     serializer_class = ProductInquirySerializer
+    pagination_class = CustomPagination
+
 
 class ProductInquiryDetailView(generics.RetrieveUpdateAPIView):
     queryset = ProductInquiry.objects.all()
