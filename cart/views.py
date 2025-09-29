@@ -48,13 +48,21 @@ class AddToCartView(APIView):
         return response
 
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import Cart
+from .serializers import CartSerializer
+
 class CartListView(APIView):
     """
     Get all cart items with product details
     """
     def get(self, request):
         cart, cart_token = get_or_create_cart(request)
-        serializer = CartSerializer(cart)
+        
+        # Pass request in context for absolute URLs
+        serializer = CartSerializer(cart, context={"request": request})
+        
         response = Response(serializer.data)
         if not request.user.is_authenticated:
             response["X-Cart-Token"] = cart_token
