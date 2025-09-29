@@ -25,13 +25,33 @@ class ProductDetailUpdateView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'id' 
 
 # ------------------Public list view
+from rest_framework import generics, permissions
+from rest_framework.filters import BaseFilterBackend
+from django.db.models import Q
+
+class ProductSearchFilter(BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        search = request.query_params.get("search")
+        if not search:
+            return queryset
+
+        return queryset.filter(
+            Q(name__icontains=search) |
+            Q(description__icontains=search) |
+            Q(ram__icontains=search) |
+            Q(storage__icontains=search) |
+            Q(cores__icontains=search) |   
+            Q(specs__icontains=search) |  
+            Q(additional_info__icontains=search)
+        )
+
 class ProductPublicListView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny] 
     pagination_class = CustomPagination
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['name', 'description', 'processor__cpu', 'memory__technology']  
+    filter_backends = [ProductSearchFilter]
+
 
 # -----------------Public detail view
 class ProductPublicDetailView(generics.RetrieveAPIView):

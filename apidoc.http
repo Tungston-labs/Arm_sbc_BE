@@ -1,5 +1,5 @@
-@baseUrl = http://127.0.0.1:8000
-# baseUrl = http://178.248.112.16:8002
+ @baseUrl = http://127.0.0.1:8000
+#  @baseUrl = http://178.248.112.16:8002
 
 # ---------------authentication---------------------------------------------------
 
@@ -85,7 +85,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 
 ### List all products (public)
-GET {{baseUrl}}/api/products/public/
+GET {{baseUrl}}/api/products/public/?page=1&page_size=12&search=ARMSBC
 Accept: application/json
 
 
@@ -103,7 +103,7 @@ GET {{baseUrl}}/api/products/40541852-b045-4bd1-8abf-d3e007bc184c/related/
 # -------------------------------cart section------------------------
 
 ### Add product
-POST {{baseUrl}}/api/cart/add/40541852-b045-4bd1-8abf-d3e007bc184c/
+POST {{baseUrl}}/api/cart/add/9f360f26-dd83-4f00-9799-a1c6873620b8/
 Content-Type: application/json
 X-Cart-Token: eed00d21-c25a-4b5e-943f-91f407a46819
 
@@ -128,7 +128,7 @@ Content-Type: application/json
 ###
 
 ### Remove item from cart
-DELETE {{baseUrl}}/api/cart/item/6699d774-b8fa-4a96-8e84-938b35cbae06/delete/
+DELETE {{baseUrl}}/api/cart/item/4f6b0af1-55f5-49fe-98da-217fed271089/delete/
 Content-Type: application/json
 
 
@@ -139,13 +139,12 @@ POST {{baseUrl}}/api/inquiries/create/
 Content-Type: application/json
 
 {
-  "cart_id": "3f0ff7e9-defe-4a0c-aa3e-a0050dbe3b86",
+  "cart_id": "563a6546-a9fa-4664-99e1-f14cdd431388",
   "product_ids": [
-    "25a6e9bd-7cd5-465c-91b5-c86f8915f236",
-    "32628e53-acb0-45d4-9c29-cbbbe59a596a"
+    "e7fe91d5-4dfe-4a7c-83e7-578cefe830b2","9f360f26-dd83-4f00-9799-a1c6873620b8"
   ],
-  "first_name": "John",
-  "last_name": "Doe",
+  "first_name": "nisna",
+  "last_name": "ummer",
   "company_name": "ACME Corp",
   "email": "john.doe@example.com",
   "phone": "+1234567890",
@@ -159,11 +158,11 @@ Content-Type: application/json
 
 ### 2. List all inquiries (admin)
 GET {{baseUrl}}/api/inquiries/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODg1MDc4LCJpYXQiOjE3NTg4NjM0NzgsImp0aSI6IjhlNWJiMTZlYzg3YzQyZTU5MWVlMWRjNmI1Y2FiOGY3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.8v0wZZIiB7NbRMeylGnEG8VMbAX_w-O4O9GQRdB43dg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4OTg0NTM0LCJpYXQiOjE3NTg5NjI5MzQsImp0aSI6ImNiZWZiN2M5MTZjOTQ5MTc5NGNiNDAwMGVjZDQ0MjExIiwidXNlcl9pZCI6IjgxZGU2YjhjLTA3OTAtNGJlMS1hZTAyLWNkMjYyMThjYWMyYSJ9.H02T_h_FLeKnELlYLjT3EMP7Mm7xuMJCw2LjHPBUAmg
 
 ### 3. Get inquiry details (admin)
-GET {{baseUrl}}/api/inquiries/ae315fac-f0a0-487a-a6fa-dc49000966df/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODg1MDc4LCJpYXQiOjE3NTg4NjM0NzgsImp0aSI6IjhlNWJiMTZlYzg3YzQyZTU5MWVlMWRjNmI1Y2FiOGY3IiwidXNlcl9pZCI6ImI2ZjM3Y2VhLTc5YzUtNDljMS1iZjJhLTc2NGE1MzIxYjBiNSJ9.8v0wZZIiB7NbRMeylGnEG8VMbAX_w-O4O9GQRdB43dg
+GET {{baseUrl}}/api/inquiries/6d052200-6340-4253-9262-f2ff1cf77591/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4OTg0NTM0LCJpYXQiOjE3NTg5NjI5MzQsImp0aSI6ImNiZWZiN2M5MTZjOTQ5MTc5NGNiNDAwMGVjZDQ0MjExIiwidXNlcl9pZCI6IjgxZGU2YjhjLTA3OTAtNGJlMS1hZTAyLWNkMjYyMThjYWMyYSJ9.H02T_h_FLeKnELlYLjT3EMP7Mm7xuMJCw2LjHPBUAmg
 
 ### 4. Update inquiry status (admin)
 PATCH {{baseUrl}}/api/inquiries/ae315fac-f0a0-487a-a6fa-dc49000966df/
@@ -188,7 +187,7 @@ GET {{baseUrl}}/api/reviews/25a6e9bd-7cd5-465c-91b5-c86f8915f236/reviews/
 Accept: application/json
 
 ### Add a review to a product
-POST {{baseUrl}}/api/reviews/25a6e9bd-7cd5-465c-91b5-c86f8915f236/reviews/add/
+POST {{baseUrl}}/api/reviews/9f360f26-dd83-4f00-9799-a1c6873620b8/reviews/add/
 Content-Type: application/json
 
 {
