@@ -6,80 +6,101 @@ from rest_framework import generics, filters
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
 from shared.pagination import CustomPagination
+from rest_framework import generics
+from .models import Category, Vendor, Processor, Board, Product
+from .serializers import (
+    CategorySerializer,
+    VendorSerializer,
+    ProcessorSerializer,
+    BoardSerializer,
+    ProductSerializer,
+)
+
+
+class CategoryListCreateView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+
+class VendorListCreateView(generics.ListCreateAPIView):
+    queryset = Vendor.objects.all()
+    serializer_class = VendorSerializer
+
+
+class VendorDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Vendor.objects.all()
+    serializer_class = VendorSerializer
+
+class CategoryVendorListView(generics.ListAPIView):
+    serializer_class = VendorSerializer
+
+    def get_queryset(self):
+        return Vendor.objects.filter(category_id=self.kwargs["category_id"])
+
+
+
+class ProcessorListCreateView(generics.ListCreateAPIView):
+    queryset = Processor.objects.all()
+    serializer_class = ProcessorSerializer
+
+
+class ProcessorDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Processor.objects.all()
+    serializer_class = ProcessorSerializer
+
+
+class VendorProcessorListView(generics.ListAPIView):
+    serializer_class = ProcessorSerializer
+
+    def get_queryset(self):
+        return Processor.objects.filter(vendor_id=self.kwargs["vendor_id"])
+
+class BoardListCreateView(generics.ListCreateAPIView):
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
+
+
+class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
+
+
+
+class ProcessorBoardListView(generics.ListAPIView):
+    serializer_class = BoardSerializer
+
+    def get_queryset(self):
+        return Board.objects.filter(processor_id=self.kwargs["processor_id"])
+
+
 
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [permissions.IsAuthenticated]  
-    pagination_class = CustomPagination
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['name', 'description', 'processor__cpu', 'memory__technology']  
 
 
-class ProductDetailUpdateView(generics.RetrieveUpdateDestroyAPIView):
+class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [permissions.IsAuthenticated]
-    lookup_field = 'id' 
 
-# ------------------Public list view
-from rest_framework import generics, permissions
-from rest_framework.filters import BaseFilterBackend
-from django.db.models import Q
 
-class ProductSearchFilter(BaseFilterBackend):
-    def filter_queryset(self, request, queryset, view):
-        search = request.query_params.get("search")
-        if not search:
-            return queryset
 
-        return queryset.filter(
-            Q(name__icontains=search) |
-            Q(description__icontains=search) |
-            Q(ram__icontains=search) |
-            Q(storage__icontains=search) |
-            Q(cores__icontains=search) |   
-            Q(specs__icontains=search) |  
-            Q(additional_info__icontains=search)
-        )
-
-class ProductPublicListView(generics.ListAPIView):
-    queryset = Product.objects.all()
+class ProcessorProductListView(generics.ListAPIView):
     serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny] 
-    pagination_class = CustomPagination
-    filter_backends = [ProductSearchFilter]
-
-
-# -----------------Public detail view
-class ProductPublicDetailView(generics.RetrieveAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny]  
-    lookup_field = 'id'  
-
-# related product list
-
-class RelatedProductsView(generics.ListAPIView):
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        product_id = self.kwargs["id"]
-        try:
-            product = Product.objects.get(id=product_id, available=True)
-        except Product.DoesNotExist:
-            return Product.objects.none()
+        return Product.objects.filter(processor_id=self.kwargs["processor_id"])
 
-       
-        qs = Product.objects.filter(
-            Q(ram=product.ram) | Q(cores=product.cores),
-            available=True
-        ).exclude(id=product.id)
 
-        if not qs.exists():
-            qs = Product.objects.exclude(id=product.id).filter(available=True)
 
-        return qs[:4]  
+class BoardProductListView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        return Product.objects.filter(board_id=self.kwargs["board_id"])
