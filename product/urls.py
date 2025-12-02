@@ -5,7 +5,7 @@ from .views import (
     ProcessorListCreateView, ProcessorDetailView, VendorProcessorListView,
     BoardListCreateView, BoardDetailView, ProcessorBoardListView,
     ProductListCreateView, ProductDetailView, ProcessorProductListView,
-    BoardProductListView,
+    BoardProductListView,SoftwareVendorListView
 )
 
 urlpatterns = [
@@ -30,6 +30,7 @@ urlpatterns = [
     path("boards/", BoardListCreateView.as_view(), name="board-list"),
     path("boards/<int:pk>/", BoardDetailView.as_view(), name="board-detail"),
     path("boards/<int:board_id>/products/", BoardProductListView.as_view(), name="board-products"),
+    path("vendors/software/", SoftwareVendorListView.as_view()),
 
     # PRODUCTS
     path("list/", ProductListCreateView.as_view(), name="product-list"),

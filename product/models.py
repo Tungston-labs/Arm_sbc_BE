@@ -24,13 +24,18 @@ class Vendor(TimeStampedModel):
         related_name="vendors"
     )
     name = models.CharField(max_length=100, unique=True)
-    image = models.ImageField(upload_to="vendors/", blank=True, null=True)   
+    image = models.ImageField(upload_to="vendors/", blank=True, null=True)
+
+    description = models.TextField(blank=True, null=True)
+    
+    website_url = models.URLField(blank=True, null=True)
 
     class Meta:
         ordering = ["name"]
 
     def __str__(self):
         return f"{self.name} ({self.category.name})"
+
 
 
 
@@ -43,18 +48,19 @@ class Processor(TimeStampedModel):
     # CPU BASE INFO
     cpu_cores = models.PositiveIntegerField(null=True, blank=True)
     cpu_arch = models.CharField(max_length=100, blank=True)      # "4xA76 + 4xA55"
-    arch_bits = models.PositiveSmallIntegerField(null=True, blank=True)
+    arch_bits = models.CharField(null=True, blank=True)
+    ram_expandable_upto = models.PositiveIntegerField(null=True, blank=True)
 
     # CACHE
-    l1_cache_kb = models.PositiveIntegerField(null=True, blank=True)
-    l2_cache_kb = models.PositiveIntegerField(null=True, blank=True)
+    l1_cache_kb = models.CharField(null=True, blank=True)
+    l2_cache_kb = models.CharField(null=True, blank=True)
 
     # GPU
     gpu = models.CharField(max_length=100, blank=True)
 
     # AI / MEMORY
     npu_tops = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    max_dram_gb = models.PositiveIntegerField(null=True, blank=True)
+    max_dram_gb = models.CharField(null=True, blank=True)
 
     # DISPLAY
     hdmi = models.BooleanField(default=False)
@@ -64,8 +70,8 @@ class Processor(TimeStampedModel):
     mipi_dsi = models.BooleanField(default=False)
 
     # I/O
-    usb2_ports = models.PositiveIntegerField(null=True, blank=True)
-    usb3_ports = models.PositiveIntegerField(null=True, blank=True)
+    usb2_ports = models.CharField(null=True, blank=True)
+    usb3_ports = models.CharField(null=True, blank=True)
     pcie_desc = models.CharField(max_length=100, blank=True)
     ethernet_cap = models.CharField(max_length=100, blank=True)
     sata = models.BooleanField(default=False)
@@ -73,7 +79,7 @@ class Processor(TimeStampedModel):
 
     # Extra Info
     extra = models.JSONField(blank=True, null=True)
-
+    """JSON expected: """
     # Image
     image = models.ImageField(upload_to="processors/", blank=True, null=True)
 
@@ -131,7 +137,6 @@ class Product(TimeStampedModel):
 
     name = models.CharField(max_length=150)
     ram_gb = models.PositiveIntegerField()                         # for filtering
-    ram_expandable_upto = models.PositiveIntegerField(null=True, blank=True)
     storage = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
