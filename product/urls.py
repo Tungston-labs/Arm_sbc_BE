@@ -3,9 +3,8 @@ from .views import (
     CategoryListCreateView, CategoryDetailView,
     VendorListCreateView, VendorDetailView, CategoryVendorListView,
     ProcessorListCreateView, ProcessorDetailView, VendorProcessorListView,
-    BoardListCreateView, BoardDetailView, ProcessorBoardListView,
     ProductListCreateView, ProductDetailView, ProcessorProductListView,
-    BoardProductListView,SoftwareVendorListView
+    SoftwareVendorListView
 )
 
 urlpatterns = [
@@ -23,13 +22,10 @@ urlpatterns = [
     # PROCESSORS
     path("processors/", ProcessorListCreateView.as_view(), name="processor-list"),
     path("processors/<int:pk>/", ProcessorDetailView.as_view(), name="processor-detail"),
-    path("processors/<int:processor_id>/boards/", ProcessorBoardListView.as_view(), name="processor-boards"),
     path("processors/<int:processor_id>/products/", ProcessorProductListView.as_view(), name="processor-products"),
 
     # BOARDS
-    path("boards/", BoardListCreateView.as_view(), name="board-list"),
-    path("boards/<int:pk>/", BoardDetailView.as_view(), name="board-detail"),
-    path("boards/<int:board_id>/products/", BoardProductListView.as_view(), name="board-products"),
+ 
     path("vendors/software/", SoftwareVendorListView.as_view()),
 
     # PRODUCTS

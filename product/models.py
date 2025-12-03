@@ -49,7 +49,7 @@ class Processor(TimeStampedModel):
     cpu_cores = models.PositiveIntegerField(null=True, blank=True)
     cpu_arch = models.CharField(max_length=100, blank=True)      # "4xA76 + 4xA55"
     arch_bits = models.CharField(null=True, blank=True)
-    ram_expandable_upto = models.PositiveIntegerField(null=True, blank=True)
+    ram_expandable_upto= models.PositiveIntegerField(null=True, blank=True)
 
     # CACHE
     l1_cache_kb = models.CharField(null=True, blank=True)
@@ -93,15 +93,21 @@ class Processor(TimeStampedModel):
 # --------------------------------------------------------
 # BOARD  (Your exact model)
 # --------------------------------------------------------
-class Board(TimeStampedModel):
+class Product(TimeStampedModel):
+    # Core relations
     processor = models.ForeignKey(
-        Processor, on_delete=models.CASCADE, related_name="boards"
+        Processor, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        related_name="products"
     )
 
+    # Basic product info
     slug = models.SlugField(max_length=100, unique=True)
     name = models.CharField(max_length=150)
     short_tagline = models.CharField(max_length=255, blank=True)
 
+    # Board-level hardware specs
     dram_config = models.CharField(max_length=150, blank=True)
     emmc_config = models.CharField(max_length=150, blank=True)
     storage_slots = models.CharField(max_length=200, blank=True)
@@ -117,31 +123,14 @@ class Board(TimeStampedModel):
 
     additional_info = models.JSONField(blank=True, null=True)
 
-    is_active = models.BooleanField(default=True)
-
-    image = models.ImageField(upload_to="boards/", blank=True, null=True)
-
-    class Meta:
-        ordering = ["name"]
-
-    def __str__(self):
-        return self.name
-
-
-# --------------------------------------------------------
-# PRODUCT (Linked to Processor and optional Board)
-# --------------------------------------------------------
-class Product(TimeStampedModel):
-    processor = models.ForeignKey(Processor, on_delete=models.SET_NULL, null=True, related_name="products")
-    board = models.ForeignKey(Board, on_delete=models.SET_NULL, null=True, blank=True, related_name="products")
-
-    name = models.CharField(max_length=150)
-    ram_gb = models.PositiveIntegerField()                         # for filtering
+    # Commercial product-specific fields
+    ram_gb = models.PositiveIntegerField()
     storage = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-
-    image = models.ImageField(upload_to="products/", blank=True, null=True)
     available = models.BooleanField(default=True)
+
+    # Product image
+    image = models.ImageField(upload_to="products/", blank=True, null=True)
 
     class Meta:
         ordering = ["name"]

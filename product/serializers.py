@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Vendor, Processor, Board, Product
+from .models import Category, Vendor, Processor, Product
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -25,16 +25,11 @@ class VendorSerializer(serializers.ModelSerializer):
 
 
 
-class BoardMiniSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Board
-        fields = ("id", "name", "slug", "image", "is_active")
-
 
 class ProductMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ("id", "name", "ram_gb", "ram_expandable_upto", "price", "image")
+        fields = ("id", "name", "ram_gb", "price", "image")
 
 
 
@@ -44,27 +39,11 @@ class ProcessorSerializer(serializers.ModelSerializer):
         queryset=Vendor.objects.all(), source="vendor", write_only=True
     )
 
-    boards = BoardMiniSerializer(many=True, read_only=True)
     products = ProductMiniSerializer(many=True, read_only=True)
 
     class Meta:
         model = Processor
         fields = "__all__"
-
-
-
-class BoardSerializer(serializers.ModelSerializer):
-    processor = ProcessorSerializer(read_only=True)
-    processor_id = serializers.PrimaryKeyRelatedField(
-        queryset=Processor.objects.all(), source="processor", write_only=True
-    )
-
-    products = ProductMiniSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Board
-        fields = "__all__"
-
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -73,10 +52,6 @@ class ProductSerializer(serializers.ModelSerializer):
         queryset=Processor.objects.all(), source="processor", write_only=True
     )
 
-    board = BoardSerializer(read_only=True)
-    board_id = serializers.PrimaryKeyRelatedField(
-        queryset=Board.objects.all(), source="board", write_only=True, required=False
-    )
 
     class Meta:
         model = Product

@@ -1,11 +1,5 @@
 from django.contrib import admin
-from .models import Category, Vendor, Processor, Board, Product
-
-
-class BoardInline(admin.TabularInline):
-    model = Board
-    extra = 1
-    fields = ("name", "slug", "is_active")
+from .models import Category, Vendor, Processor,  Product
 
 
 class ProductInline(admin.TabularInline):
@@ -32,21 +26,13 @@ class ProcessorAdmin(admin.ModelAdmin):
     list_display = ("id", "vendor", "code", "name", "cpu_cores", "updated_at")
     search_fields = ("code", "name")
     list_filter = ("vendor", "arch_bits", "hdmi", "dp", "mipi_dsi")
-    inlines = [BoardInline, ProductInline]
-    readonly_fields = ("created_at", "updated_at")
-
-
-@admin.register(Board)
-class BoardAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "processor", "is_active", "updated_at")
-    search_fields = ("name", "slug")
-    list_filter = ("is_active", "processor__vendor")
+    inlines = [ProductInline]
     readonly_fields = ("created_at", "updated_at")
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "processor", "board", "ram_gb", "price", "available")
+    list_display = ("id", "name", "processor", "ram_gb", "price", "available")
     search_fields = ("name",)
     list_filter = ("processor", "available")
     readonly_fields = ("created_at", "updated_at")

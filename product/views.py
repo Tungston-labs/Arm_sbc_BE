@@ -7,12 +7,11 @@ from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
 from shared.pagination import CustomPagination
 from rest_framework import generics
-from .models import Category, Vendor, Processor, Board, Product
+from .models import Category, Vendor, Processor,  Product
 from .serializers import (
     CategorySerializer,
     VendorSerializer,
     ProcessorSerializer,
-    BoardSerializer,
     ProductSerializer,
 )
 
@@ -60,23 +59,6 @@ class VendorProcessorListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Processor.objects.filter(vendor_id=self.kwargs["vendor_id"])
-
-class BoardListCreateView(generics.ListCreateAPIView):
-    queryset = Board.objects.all()
-    serializer_class = BoardSerializer
-
-
-class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Board.objects.all()
-    serializer_class = BoardSerializer
-
-
-
-class ProcessorBoardListView(generics.ListAPIView):
-    serializer_class = BoardSerializer
-
-    def get_queryset(self):
-        return Board.objects.filter(processor_id=self.kwargs["processor_id"])
 
 
 
@@ -149,8 +131,4 @@ class ProcessorProductListView(generics.ListAPIView):
 
 
 
-class BoardProductListView(generics.ListAPIView):
-    serializer_class = ProductSerializer
 
-    def get_queryset(self):
-        return Product.objects.filter(board_id=self.kwargs["board_id"])
