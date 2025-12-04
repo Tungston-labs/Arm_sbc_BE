@@ -7,6 +7,39 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = "__all__"
 
+class ProcessorMiniSerializer(serializers.ModelSerializer):
+    class Meta:      
+        model = Processor
+        fields = (
+            "id",
+            "code",
+            "name",
+            "image",
+            "cpu",
+            "architecture",
+            "max_ram",
+            "gpu",
+            "npu",
+            "ethernet_mac",
+            "l1_cache",
+            "l2_l3_cache",
+            "hdmi",
+            "dp",
+            "edp",
+            "dsi",
+            "lvds",
+            "usb2",
+            "usb3",
+            "sdio",
+            "sata",
+        ) 
+
+
+class VendorMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vendor
+        fields = ("id", "name", "image")
+
 
 class VendorSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
@@ -32,9 +65,8 @@ class ProductMiniSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "ram_gb", "price", "image")
 
 
-
 class ProcessorSerializer(serializers.ModelSerializer):
-    vendor = VendorSerializer(read_only=True)
+    vendor = VendorMiniSerializer(read_only=True)
     vendor_id = serializers.PrimaryKeyRelatedField(
         queryset=Vendor.objects.all(), source="vendor", write_only=True
     )
@@ -46,13 +78,14 @@ class ProcessorSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
 class ProductSerializer(serializers.ModelSerializer):
-    processor = ProcessorSerializer(read_only=True)
+    processor = ProcessorMiniSerializer(read_only=True)
     processor_id = serializers.PrimaryKeyRelatedField(
         queryset=Processor.objects.all(), source="processor", write_only=True
     )
 
-
     class Meta:
         model = Product
         fields = "__all__"
+

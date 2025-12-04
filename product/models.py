@@ -40,47 +40,101 @@ class Vendor(TimeStampedModel):
 
 
 class Processor(TimeStampedModel):
-    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE, related_name="processors")
+    vendor = models.ForeignKey(
+        Vendor, on_delete=models.CASCADE, related_name="processors"
+    )
 
-    code = models.CharField(max_length=50, unique=True)          # e.g. "RK3588"
-    name = models.CharField(max_length=100)                      # e.g. "Rockchip RK3588"
+    # IDENTIFICATION
+    code = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
 
-    # CPU BASE INFO
-    cpu_cores = models.PositiveIntegerField(null=True, blank=True)
-    cpu_arch = models.CharField(max_length=100, blank=True)      # "4xA76 + 4xA55"
-    arch_bits = models.CharField(null=True, blank=True)
-    ram_expandable_upto= models.PositiveIntegerField(null=True, blank=True)
+    # --- REQUIRED SoC FIELDS ---
+    soc = models.CharField(max_length=100, blank=True, null=True)                 
+    architecture = models.CharField(max_length=100, blank=True, null=True)        
+    cpu = models.CharField(max_length=200, blank=True, null=True)                 
+    max_clock = models.CharField(max_length=100, blank=True, null=True)           
+    gpu = models.CharField(max_length=100, blank=True, null=True)
+    npu = models.CharField(max_length=100, blank=True, null=True)                 
+    l1_cache = models.CharField(max_length=100, blank=True, null=True)
+    l2_l3_cache = models.CharField(max_length=100, blank=True, null=True)
+    max_ram = models.CharField(max_length=100, blank=True, null=True)             
 
-    # CACHE
-    l1_cache_kb = models.CharField(null=True, blank=True)
-    l2_cache_kb = models.CharField(null=True, blank=True)
+    # =============================
+    #  DISPLAY CAPABILITY (ENUMS)
+    # =============================
+    HDMI_CHOICES = [
+        ("none", "Not Supported"),
+        ("1.4", "HDMI 1.4"),
+        ("2.0", "HDMI 2.0"),
+        ("2.1", "HDMI 2.1"),
+    ]
 
-    # GPU
-    gpu = models.CharField(max_length=100, blank=True)
+    LVDS_CHOICES = [
+        ("none", "Not Supported"),
+        ("single", "Single-channel LVDS"),
+        ("dual", "Dual-channel LVDS"),
+    ]
 
-    # AI / MEMORY
-    npu_tops = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    max_dram_gb = models.CharField(null=True, blank=True)
+    EDP_CHOICES = [
+        ("none", "Not Supported"),
+        ("1.1", "eDP 1.1"),
+        ("1.2", "eDP 1.2"),
+        ("1.3", "eDP 1.3"),
+        ("1.4", "eDP 1.4"),
+    ]
 
-    # DISPLAY
-    hdmi = models.BooleanField(default=False)
-    lvds = models.BooleanField(default=False)
-    edp = models.BooleanField(default=False)
-    dp = models.BooleanField(default=False)
-    mipi_dsi = models.BooleanField(default=False)
+    DP_CHOICES = [
+        ("none", "Not Supported"),
+        ("1.2", "DisplayPort 1.2"),
+        ("1.4", "DisplayPort 1.4"),
+        ("2.0", "DisplayPort 2.0"),
+    ]
 
-    # I/O
-    usb2_ports = models.CharField(null=True, blank=True)
-    usb3_ports = models.CharField(null=True, blank=True)
-    pcie_desc = models.CharField(max_length=100, blank=True)
-    ethernet_cap = models.CharField(max_length=100, blank=True)
+    DSI_CHOICES = [
+        ("none", "Not Supported"),
+        ("2-lane", "MIPI DSI 2-lane"),
+        ("4-lane", "MIPI DSI 4-lane"),
+    ]
+
+    hdmi = models.CharField(max_length=10, choices=HDMI_CHOICES, default="none")
+    lvds = models.CharField(max_length=10, choices=LVDS_CHOICES, default="none")
+    edp = models.CharField(max_length=10, choices=EDP_CHOICES, default="none")
+    dp = models.CharField(max_length=10, choices=DP_CHOICES, default="none")
+    dsi = models.CharField(max_length=10, choices=DSI_CHOICES, default="none")
+
+
+
+    USB2_CHOICES = [
+        ("none", "Not Supported"),
+        ("1-port", "1 Port"),
+        ("2-port", "2 Ports"),
+        ("4-port", "4 Ports"),
+    ]
+
+    USB3_CHOICES = [
+        ("none", "Not Supported"),
+        ("1-port", "1 Port"),
+        ("2-port", "2 Ports"),
+    ]
+
+    usb2 = models.CharField(max_length=10, choices=USB2_CHOICES, default="none")
+    usb3 = models.CharField(max_length=10, choices=USB3_CHOICES, default="none")
+
+    sdio = models.BooleanField(default=False)
     sata = models.BooleanField(default=False)
-    sdio = models.BooleanField(default=True)
 
-    # Extra Info
-    extra = models.JSONField(blank=True, null=True)
-    """JSON expected: """
-    # Image
+    ETHERNET_CHOICES = [
+        ("none", "Not Supported"),
+        ("10/100", "10/100 Mbps MAC"),
+        ("1g", "1G Ethernet MAC"),
+        ("2.5g", "2.5G Ethernet MAC"),
+    ]
+
+    ethernet_mac = models.CharField(
+        max_length=20, choices=ETHERNET_CHOICES, default="none"
+    )
+
+    # IMAGE
     image = models.ImageField(upload_to="processors/", blank=True, null=True)
 
     class Meta:
@@ -90,9 +144,7 @@ class Processor(TimeStampedModel):
         return f"{self.vendor.name} {self.code}"
 
 
-# --------------------------------------------------------
-# BOARD  (Your exact model)
-# --------------------------------------------------------
+
 class Product(TimeStampedModel):
     # Core relations
     processor = models.ForeignKey(
@@ -102,14 +154,12 @@ class Product(TimeStampedModel):
         related_name="products"
     )
 
-    # Basic product info
     slug = models.SlugField(max_length=100, unique=True)
     name = models.CharField(max_length=150)
     short_tagline = models.CharField(max_length=255, blank=True)
 
-    # Board-level hardware specs
-    dram_config = models.CharField(max_length=150, blank=True)
-    emmc_config = models.CharField(max_length=150, blank=True)
+    dram_config = models.CharField(max_length=150, blank=True)    # MEMORY
+    emmc_config = models.CharField(max_length=150, blank=True)    # eMMC
     storage_slots = models.CharField(max_length=200, blank=True)
 
     wifi = models.CharField(max_length=150, blank=True)
@@ -123,13 +173,37 @@ class Product(TimeStampedModel):
 
     additional_info = models.JSONField(blank=True, null=True)
 
-    # Commercial product-specific fields
     ram_gb = models.PositiveIntegerField()
     storage = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     available = models.BooleanField(default=True)
 
-    # Product image
+
+
+    memory_type = models.CharField(max_length=100, blank=True)      
+
+    ethernet_10_100 = models.BooleanField(default=False)            
+    ethernet_1g = models.BooleanField(default=False)               
+
+    hdmi_in = models.BooleanField(default=False)                    
+    hdmi_out = models.BooleanField(default=False)               
+
+    dp = models.BooleanField(default=False)                        
+    lvds = models.BooleanField(default=False)                   
+    edp = models.BooleanField(default=False)                      
+    dsi = models.BooleanField(default=False)                     
+
+    usb2 = models.BooleanField(default=False)                       
+    usb3 = models.BooleanField(default=False)                       
+    type_c = models.BooleanField(default=False)                    
+
+    debug_port = models.BooleanField(default=False)                 
+    speaker = models.BooleanField(default=False)                  
+    audio_amplifier = models.BooleanField(default=False)           
+
+    rs232 = models.BooleanField(default=False)                    
+    rs485 = models.BooleanField(default=False)                     
+
     image = models.ImageField(upload_to="products/", blank=True, null=True)
 
     class Meta:

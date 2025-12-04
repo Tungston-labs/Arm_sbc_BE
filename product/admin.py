@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Vendor, Processor,  Product
+from .models import Category, Vendor, Processor, Product
 
 
 class ProductInline(admin.TabularInline):
@@ -21,13 +21,42 @@ class VendorAdmin(admin.ModelAdmin):
     list_filter = ("category",)
 
 
+
 @admin.register(Processor)
 class ProcessorAdmin(admin.ModelAdmin):
-    list_display = ("id", "vendor", "code", "name", "cpu_cores", "updated_at")
-    search_fields = ("code", "name")
-    list_filter = ("vendor", "arch_bits", "hdmi", "dp", "mipi_dsi")
-    inlines = [ProductInline]
+
+    # Display
+    list_display = (
+        "id",
+        "vendor",
+        "code",
+        "name",
+        "cpu",
+        "max_clock",
+        "gpu",
+        "npu",
+        "updated_at",
+    )
+
+    # Search
+    search_fields = ("code", "name", "cpu", "architecture")
+
+    list_filter = (
+        "vendor",
+        "architecture",
+        "dp",
+        "lvds",
+        "edp",
+        "dsi",
+        "usb2",
+        "usb3",
+       
+       
+    )
+
     readonly_fields = ("created_at", "updated_at")
+    inlines = [ProductInline]
+
 
 
 @admin.register(Product)
