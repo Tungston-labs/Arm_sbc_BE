@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'review',
     'shared',
     'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

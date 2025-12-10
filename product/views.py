@@ -67,49 +67,16 @@ from .models import Product
 from .serializers import ProductSerializer
 from shared.pagination import CustomPagination
 
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import ProductFilter
+
 class ProductListCreateView(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    pagination_class = CustomPagination  
-    
-    def get_queryset(self):
-        queryset = Product.objects.all()
+    pagination_class = CustomPagination
 
-        processor_id = self.request.query_params.get("processor_id")
-        processor_name = self.request.query_params.get("processor_name")
-        processor_code = self.request.query_params.get("processor_code")
-        board_name = self.request.query_params.get("board_name")
-        ram_gb = self.request.query_params.get("ram_gb")
-        price_min = self.request.query_params.get("price_min")
-        price_max = self.request.query_params.get("price_max")
-        available = self.request.query_params.get("available")
-
-        # ⭐ FILTER BY PROCESSOR ID (MOST IMPORTANT FIX)
-        if processor_id:
-            queryset = queryset.filter(processor_id=processor_id)
-
-        # Filter by Processor fields
-        if processor_name:
-            queryset = queryset.filter(processor__name__icontains=processor_name)
-        if processor_code:
-            queryset = queryset.filter(processor__code__icontains=processor_code)
-
-        # Filter by Board fields
-        if board_name:
-            queryset = queryset.filter(board__name__icontains=board_name)
-
-        if ram_gb:
-            queryset = queryset.filter(ram_gb=ram_gb)
-        if price_min:
-            queryset = queryset.filter(price__gte=price_min)
-        if price_max:
-            queryset = queryset.filter(price__lte=price_max)
-        if available is not None:
-            if available.lower() == "true":
-                queryset = queryset.filter(available=True)
-            elif available.lower() == "false":
-                queryset = queryset.filter(available=False)
-
-        return queryset
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProductFilter
 
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):

@@ -38,7 +38,7 @@ class ProcessorMiniSerializer(serializers.ModelSerializer):
 class VendorMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vendor
-        fields = ("id", "name", "image")
+        fields = ("id", "name", "image",)
 
 
 class VendorSerializer(serializers.ModelSerializer):
