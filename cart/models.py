@@ -21,7 +21,7 @@ class Cart(TimeStampedModel):
 class CartItem(TimeStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     price_at_add = models.DecimalField(max_digits=12, decimal_places=2, default=0)  
 
