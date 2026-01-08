@@ -39,7 +39,7 @@ class BoardMiniSerializer(serializers.ModelSerializer):
 # -------------------------
 class ProcessorCatalogSerializer(serializers.ModelSerializer):
     boards = BoardMiniSerializer(many=True, read_only=True)
-
+    image = serializers.ImageField(use_url=True)
     class Meta:
         model = Processor
         fields = [
@@ -63,6 +63,7 @@ class ProcessorCatalogSerializer(serializers.ModelSerializer):
             "sata",
             "sdio",
             "boards",
+            "image",
         ]
 
 
