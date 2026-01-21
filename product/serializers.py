@@ -62,7 +62,8 @@ class VendorSerializer(serializers.ModelSerializer):
 class ProductMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ("id", "name", "ram_gb", "price", "image")
+        fields = ("id", "name", "ram_gb", "price", "front_image", "back_image")
+
 
 
 class ProcessorSerializer(serializers.ModelSerializer):
@@ -84,8 +85,15 @@ class ProductSerializer(serializers.ModelSerializer):
     processor_id = serializers.PrimaryKeyRelatedField(
         queryset=Processor.objects.all(), source="processor", write_only=True
     )
+    images = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = "__all__"
+
+    def get_images(self, obj):
+        return {
+            "front": obj.front_image.url if obj.front_image else None,
+            "back": obj.back_image.url if obj.back_image else None
+        }
 

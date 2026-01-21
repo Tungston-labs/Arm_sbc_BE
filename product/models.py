@@ -204,7 +204,8 @@ class Product(TimeStampedModel):
     rs232 = models.BooleanField(default=False)                    
     rs485 = models.BooleanField(default=False)                     
 
-    image = models.ImageField(upload_to="products/", blank=True, null=True)
+    front_image = models.ImageField(upload_to="products/front/", blank=True, null=True)
+    back_image = models.ImageField(upload_to="products/back/", blank=True, null=True)
 
     class Meta:
         ordering = ["name"]
