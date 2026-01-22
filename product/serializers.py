@@ -86,6 +86,7 @@ class ProductSerializer(serializers.ModelSerializer):
         queryset=Processor.objects.all(), source="processor", write_only=True
     )
     images = serializers.SerializerMethodField()
+    ethernet_display = serializers.CharField(source="get_ethernet_display", read_only=True)
 
     class Meta:
         model = Product
