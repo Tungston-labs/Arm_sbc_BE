@@ -160,7 +160,7 @@ class Product(TimeStampedModel):
         ETH_1G = "1G", "1 Gigabit"
         ETH_DUAL_1G = "DUAL_1G", "Dual Gigabit"
 
-    ethernet_type = models.CharField(
+    ethernet = models.CharField(
         max_length=20,
         choices=EthernetType.choices,
         default=EthernetType.NONE
@@ -175,7 +175,6 @@ class Product(TimeStampedModel):
     storage_slots = models.CharField(max_length=200, blank=True)
 
     wifi = models.CharField(max_length=150, blank=True)
-    ethernet = models.CharField(max_length=200, blank=True)
     video_connectors = models.CharField(max_length=200, blank=True)
     expansion = models.CharField(max_length=200, blank=True)
     gpio_headers = models.CharField(max_length=200, blank=True)
