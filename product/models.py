@@ -148,10 +148,22 @@ class Processor(TimeStampedModel):
 class Product(TimeStampedModel):
     # Core relations
     processor = models.ForeignKey(
-        Processor, 
-        on_delete=models.SET_NULL, 
-        null=True, 
+        Processor,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name="products"
+    )
+
+    class EthernetType(models.TextChoices):
+        NONE = "NONE", "No Ethernet"
+        ETH_10_100 = "10_100", "10/100 Mbps"
+        ETH_1G = "1G", "1 Gigabit"
+        ETH_DUAL_1G = "DUAL_1G", "Dual Gigabit"
+
+    ethernet_type = models.CharField(
+        max_length=20,
+        choices=EthernetType.choices,
+        default=EthernetType.NONE
     )
 
     slug = models.SlugField(max_length=100, unique=True)
@@ -182,8 +194,7 @@ class Product(TimeStampedModel):
 
     memory_type = models.CharField(max_length=100, blank=True)      
 
-    ethernet_10_100 = models.BooleanField(default=False)            
-    ethernet_1g = models.BooleanField(default=False)               
+                
 
     hdmi_in = models.BooleanField(default=False)                    
     hdmi_out = models.BooleanField(default=False)               
