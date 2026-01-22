@@ -12,12 +12,13 @@ class ProductFilter(django_filters.FilterSet):
     def filter_ethernet(self, queryset, name, value):
         value = value.lower().strip()
         if value == "gigabit":
-            return queryset.filter(ethernet_1g=True)
+            return queryset.filter(ethernet__in=["1G", "DUAL_1G"])
         elif value == "fast":
-            return queryset.filter(ethernet_10_100=True)
+            return queryset.filter(ethernet="10_100")
         elif value == "none":
-            return queryset.filter(ethernet_1g=False, ethernet_10_100=False)
+            return queryset.filter(ethernet="NONE")
         return queryset
+
 
     class Meta:
         model = Product
